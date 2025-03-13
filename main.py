@@ -11,15 +11,13 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-firebase_credentials_str = os.getenv("FIREBASE_CREDENTIALS").replace(r'\n', '\\n')
+firebase_credentials_path = os.getenv("FIREBASE_CREDENTIALS").replace(r'\n', '\\n')
 
-if firebase_credentials_path:
-    print("ERROR: FIREBASE_CREDENTIALS environment variable ia not set!")
-    sys.exit(1)
-
-try:
-    with open(firebase_credentials.path, "r") as f:
-        firebase_credentials = json.load(f)
+if not firebase_credentials_path:
+    raise ValueError("ERROR: FIREBASE_CREDENTIALS environment variable is not set!")
+    
+with open(firebase_credentials.path, "r") as f:
+    firebase_credentials = json.load(f)
         
     cred = credentials.Certificate(firebase_credentials)
     firebase_admin.initialize_app(cred)
