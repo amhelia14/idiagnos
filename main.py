@@ -17,8 +17,8 @@ if not firebase_credentials_path:
     raise ValueError("ERROR: FIREBASE_CREDENTIALS environment variable is not set!")
     
 try:
-    with open(firebase_credentials.path, "r") as f:
-        firebase_credentials = json.load(f)
+    with open(firebase_credentials_path, "r") as f:
+        firebase-credentials = json.load(f)
         
     cred = credentials.Certificate(firebase-credentials)
     firebase_admin.initialize_app(cred)
