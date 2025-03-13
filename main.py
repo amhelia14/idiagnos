@@ -11,7 +11,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-firebase_credentials_str = os.getenv("FIREBASE_CREDENTIALS")
+firebase_credentials_str = os.getenv("FIREBASE_CREDENTIALS").replace(r'\n', '\n')
 
 if not firebase_credentials_str:
     print("ERROR: FIREBASE_CREDENTIALS environment variable not found!")
