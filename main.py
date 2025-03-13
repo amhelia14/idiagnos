@@ -7,23 +7,35 @@ import os
 import sys
 import json
 from flask_cors import CORS
+import gc
 
 app = Flask(__name__)
 CORS(app)
 
-firebase_credentials_path = os.getenv("FIREBASE_CREDENTIALS").replace(r'\n', '\\n')
+# Flag untuk status inisialisasi Firebase
+firebase_initialized = False
 
-if not firebase_credentials_path:
-    raise ValueError("ERROR: FIREBASE_CREDENTIALS environment variable is not set!")
+try:
+    # Menggunakan environment variable untuk kredensial Firebase di Railway
+    firebase_credentials_json = os.getenv("FIREBASE_CREDENTIALS")
     
-try:    
-    cred = credentials.Certificate(firebase_credentials_path)
-    firebase_admin.initialize_app(cred)
-    db = firestore.client()
-    print("Firestore connected successfully!")
+    if not firebase_credentials_json:
+        print("ERROR: FIREBASE_CREDENTIALS environment variable is not set!")
+    else:
+        # Parse JSON credentials dari environment variable
+        try:
+            cred_dict = json.loads(firebase_credentials_json)
+            cred = credentials.Certificate(cred_dict)
+            firebase_admin.initialize_app(cred)
+            db = firestore.client()
+            firebase_initialized = True
+            print("Firestore connected successfully!")
+        except json.JSONDecodeError as je:
+            print(f"ERROR: Invalid JSON in FIREBASE_CREDENTIALS - {je}")
+        except Exception as e:
+            print(f"ERROR: Failed to initialize Firestore with credentials - {e}")
 except Exception as e:
     print(f"ERROR: Failed to initialize Firestore - {e}")
-    sys.exit(1)
 
 try:
     with open('model.pkl', 'rb') as f:
