@@ -5,6 +5,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import os
 import sys
+import json
 from flask_cors import CORS
 
 app = Flask(__name__)
