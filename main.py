@@ -19,7 +19,8 @@ if not firebase_credentials_path:
 
 try:
     with open(firebase_credentials.path, "r") as f:
-    firebase_credentials = json.loads(f)
+        firebase_credentials = json.loads(f.read)
+        
     cred = credentials.Certificate(firebase_credentials)
     firebase_admin.initialize_app(cred)
     db = firestore.client()
