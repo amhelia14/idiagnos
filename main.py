@@ -16,11 +16,8 @@ firebase_credentials_path = os.getenv("FIREBASE_CREDENTIALS").replace(r'\n', '\\
 if not firebase_credentials_path:
     raise ValueError("ERROR: FIREBASE_CREDENTIALS environment variable is not set!")
     
-try:
-    with open(firebase_credentials_path, "r") as f:
-        firebase-credentials = json.load(f)
-        
-    cred = credentials.Certificate(firebase-credentials)
+try:    
+    cred = credentials.Certificate(firebase_credentials_path)
     firebase_admin.initialize_app(cred)
     db = firestore.client()
     print("Firestore connected successfully!")
