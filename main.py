@@ -20,7 +20,7 @@ try:
     with open(firebase_credentials.path, "r") as f:
         firebase_credentials = json.load(f)
         
-    cred = credentials.Certificate(firebase_credentials)
+    cred = credentials.Certificate(firebase-credentials)
     firebase_admin.initialize_app(cred)
     db = firestore.client()
     print("Firestore connected successfully!")
