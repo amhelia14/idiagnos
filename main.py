@@ -13,13 +13,13 @@ CORS(app)
 
 firebase_credentials_str = os.getenv("FIREBASE_CREDENTIALS").replace(r'\n', '\\n')
 
-if not firebase_credentials_path:
+if firebase_credentials_path:
     print("ERROR: FIREBASE_CREDENTIALS environment variable ia not set!")
     sys.exit(1)
 
 try:
     with open(firebase_credentials.path, "r") as f:
-        firebase_credentials = json.loads(f.read)
+        firebase_credentials = json.load(f)
         
     cred = credentials.Certificate(firebase_credentials)
     firebase_admin.initialize_app(cred)
