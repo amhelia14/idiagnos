@@ -106,6 +106,7 @@ def diagnose():
             'diagnosis_result': predicted_label
         }
         diagnosis_ref.set(diagnosis_data)
+        gc.collect()
         return jsonify({"success": True, "diagnosisId": diagnosis_id, "result": predicted_label})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
