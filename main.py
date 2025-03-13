@@ -10,20 +10,20 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-cred_path = 'credentials.json'
-if not os.path.exists(cred_path):
-    print("ERROR: Service account key not found! Firestore integration will not work.")
+firebase_credentials_str = os.getenv("FIREBASE_CREDENTIALS")
+
+if not firebase_credentials_str:
+    print("ERROR: FIREBASE_CREDENTIALS environment variable not found!")
     sys.exit(1)
 
 try:
-    cred = credentials.Certificate(cred_path)
+    firebase_credentials = json.loads(firebase_credentials_str)
+    cred = credentials.Certificate(firebase_credentials)
     firebase_admin.initialize_app(cred)
     db = firestore.client()
-    firebase_initialized = True
     print("Firestore connected successfully!")
 except Exception as e:
     print(f"ERROR: Failed to initialize Firestore - {e}")
-    firebase_initialized = False
     sys.exit(1)
 
 try:
