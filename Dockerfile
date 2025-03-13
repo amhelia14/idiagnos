@@ -4,15 +4,24 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN python -m venv venv
-RUN venv/bin/avtivate && pip install --no-cache-dir -r requirements.txt
-RUN . venv/bin/activate && python -m pip install --upgrade pip setuptools
-RUN /bin/bash
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libffi-dev \
+    libssl-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN python -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip setuptools && \
+    /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+
+ENV PATH="/opt/venv/bin:$PATH"
 
 COPY model.pkl ./
 COPY encoders.pkl ./
-COPY app.py ./
-COPY key.json ./
+COPY main.py ./
+COPY credentials.json ./
+COPY label_mapping.pkl ./
 
 ENV PORT=8080
 EXPOSE 8080
